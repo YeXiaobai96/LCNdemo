@@ -1,0 +1,67 @@
+server:
+  port: 9192
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: root
+    druid:
+      minIdle: 10
+      maxActive: 100
+      initialSize: 10
+      timeBetweenEvictionRunsMillis: 3000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1
+      validationQueryTimeout: 10000
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      maxWait: 60000
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat, wall, log4j
+  #      proxyFilters:
+  #        - wallFilter
+  application:
+    name: api-feign
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: DEBUG
+swagger:
+  enable: true
+
+eureka:
+  instance:
+    # : true
+    instance-id: ${spring.cloud.client.ipAddress:localhost}:${server.port}
+    hostname: localhost
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 20
+  client:
+    service-url:
+      defaultZone: http://peer1:8000/eureka/
+    healthcheck:
+      enabled: true
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true #关闭服务支持，只能POST请求调用。
+  endpoints:
+    web:
+      exposure:
+        include: "*" #暴露所有端点 默认是info,health
+info:
+  app:
+    version: 1.1.2
+    name: prod   #/actuator/info 自定义的info端点 否则是空的
+## tx-manager 配置
+tx-lcn:
+  client:
+    manager-address: 127.0.0.1:8070

@@ -1,3 +1,3 @@
-# Spring boot
+# 分部署事务LCN
 
-springboot简单开发框架
+LCN的简单使用，只有client端，注册中心和事务管理端自行配置
